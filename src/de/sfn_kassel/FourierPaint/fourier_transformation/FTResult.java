@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public class FTResult extends ArrayList<Sinus> {
     public FTResult(ArrayList<Complex> in, double samplerate, int size) {
+        super();
+
         Complex c;
         double phi;
 

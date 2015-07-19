@@ -1,5 +1,8 @@
 package de.sfn_kassel.FourierPaint;
 
+import de.sfn_kassel.FourierPaint.fourier_transformation.Complex;
+import de.sfn_kassel.FourierPaint.fourier_transformation.FourierTransformation;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,7 +17,6 @@ public class Main {
 
         FourierTransformation ft = new FourierTransformation(inImg.getWidth(), inImg.getHeight());
 
-        //ArrayList<Complex> result = ft.execute(new double[]{1, 1, 1, 1});
         double in[] = new double[inImg.getWidth() * inImg.getHeight()];
 
         for (int i = 0; i < in.length; i++) {
@@ -24,21 +26,7 @@ public class Main {
             in[i] = rgbToGrayscale(inImg.getRGB(x, y));
         }
 
-        /*for (int i = 0; i < 1024; i++) {
-            in[i] = Math.sin(((2 * Math.PI) / 1024) * i);
-
-            in[i] += rand.nextDouble() * 0.02 - 0.01;
-        }*/
-
-        //ft = new FourierTransformation(256);
-
-        // in = new double[256];
-
-        //for (int i = 0; i < 256; i++) {
-        //  in[i] = ((i % 8) - 4) > 0 ? 1 : -1;
-        //}
-
-        ArrayList<Complex> result = ft.execute(in);
+        ArrayList<Complex> result = ft.executeForward(in);
 
         double a = 0;
         double b = 0;
@@ -47,7 +35,7 @@ public class Main {
             a += c.real;
             b += c.imaginary;
 
-            System.out.println("total real: " + c.real + " total imaginary: " + c.imaginary);
+            System.out.println("real: " + c.real + " imaginary: " + c.imaginary);
         }
 
         System.out.println("total real: " + a + " total imaginary: " + b);

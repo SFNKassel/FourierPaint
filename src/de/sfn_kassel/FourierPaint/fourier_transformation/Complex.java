@@ -1,4 +1,4 @@
-package de.sfn_kassel.FourierPaint;
+package de.sfn_kassel.FourierPaint.fourier_transformation;
 
 /**
  * Created by robin on 11.07.15.

@@ -7,7 +7,9 @@ import java.awt.*;
  * Created by robin on 19.07.15.
  */
 public class FourierPaint extends JFrame {
-    private DrawPanel fourier;
+    private DrawPanel fourierPanel;
+    private DrawPanel picturePanel;
+    private MenuPanel menuPanel;
 
     public FourierPaint() {
         super();
@@ -17,9 +19,25 @@ public class FourierPaint extends JFrame {
 
         Container cp = this.getContentPane();
 
-        fourier = new DrawPanel();
+        cp.setLayout(new BorderLayout());
 
-        cp.add(fourier);
+        JPanel drawPanel = new JPanel();
+
+        drawPanel.setLayout(new BoxLayout(drawPanel, BoxLayout.LINE_AXIS));
+
+        fourierPanel = new DrawPanel(256);
+        picturePanel = new DrawPanel(256);
+        menuPanel = new MenuPanel();
+
+        fourierPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        picturePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        cp.add(menuPanel, BorderLayout.PAGE_START);
+        cp.add(drawPanel, BorderLayout.CENTER);
+
+        drawPanel.add(fourierPanel);
+        drawPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        drawPanel.add(picturePanel);
 
         this.setTitle("FourierPaint");
 

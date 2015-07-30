@@ -6,7 +6,9 @@ import javax.swing.*;
  * Created by robin on 27.07.15.
  */
 public class MenuPanel extends JPanel {
-    public MenuPanel() {
+	private static final long serialVersionUID = -1705327359545988591L;
+
+	public MenuPanel() {
         super();
 
         this.add(new JButton("test"));

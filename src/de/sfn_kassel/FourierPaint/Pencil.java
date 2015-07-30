@@ -25,7 +25,7 @@ public class Pencil implements IBrush {
 
         g.setColor(this.color);
 
-        g.fillOval(x, y, size, size);
+        g.fillOval(x - (size / 2), y - (size / 2), size, size);
     }
 
     @Override

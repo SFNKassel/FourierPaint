@@ -6,7 +6,9 @@ import java.util.ArrayList;
  * Created by robin on 19.07.15.
  */
 public class FTResult extends ArrayList<Sinus> {
-    public FTResult(ArrayList<Complex> in, double samplerate, int size) {
+	private static final long serialVersionUID = 194112157490037151L;
+
+	public FTResult(ArrayList<Complex> in, double samplerate, int size) {
         super();
 
         Complex c;

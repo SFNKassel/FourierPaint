@@ -19,35 +19,38 @@ public class FourierTransformation {
     private Pointer outForward;
     private Pointer inBackward;
     private int totalSize;
+    private ArrayList<Integer> dims = new ArrayList<_>;
 
     public FourierTransformation(int x) {
         inForward = fftw.fftw_malloc(new NativeSize(8 * x + 2)).getByteBuffer(0, 8 * x + 2).asDoubleBuffer();
-        outForward = fftw.fftw_malloc(new NativeSize(8 * x + 2));
-        outForward.setMemory(0, 8 * x, (byte) 0);
+        outForward = fftw.fftw_malloc(new NativeSize(8 * 2 * x + 2));
+        outForward.setMemory(0, 8 * 2 * x, (byte) 0);
 
-        inBackward = fftw.fftw_malloc(new NativeSize(8 * x + 2));
+        inBackward = fftw.fftw_malloc(new NativeSize(8 * 2 * x + 2));
         inBackward.setMemory(0, 8 * x + 2, (byte) 0);
         outBackward = fftw.fftw_malloc(new NativeSize(8 * x + 2)).getByteBuffer(0, 8 * x + 2).asDoubleBuffer();
 
         totalSize = x;
 
-        plan_forward = fftw.fftw_plan_dft_r2c_1d(x, inForward, outForward, Fftw3Library.FFTW_ESTIMATE);
-        plan_backward = fftw.fftw_plan_dft_c2r_1d(x, inBackward, outBackward, Fftw3Library.FFTW_ESTIMATE);
+        dims.add(x);
+        
+        plan_forward = fftw.fftw_plan_dft_r2c_1d(x, inForward, outForward, Fftw3Library.FFTW_PATIENT);
+        plan_backward = fftw.fftw_plan_dft_c2r_1d(x, inBackward, outBackward, Fftw3Library.FFTW_PATIENT);
     }
 
     public FourierTransformation(int x, int y) {
         inForward = fftw.fftw_malloc(new NativeSize(8 * (x + 2) * y)).getByteBuffer(0, 8 * (x + 2) * y).asDoubleBuffer();
-        outForward = fftw.fftw_malloc(new NativeSize(8 * (x + 2) * y));
-        outForward.setMemory(0, 8 * (x + 2) * y, (byte) 0);
+        outForward = fftw.fftw_malloc(new NativeSize(8 * 2 * (x + 2) * y));
+        outForward.setMemory(0, 8 * 2 * (x + 2) * y, (byte) 0);
 
-        inBackward = fftw.fftw_malloc(new NativeSize(8 * (x + 2) * y));
-        inBackward.setMemory(0, 8 * (x + 2) * y, (byte) 0);
+        inBackward = fftw.fftw_malloc(new NativeSize(8 * 2 * (x + 2) * y));
+        inBackward.setMemory(0, 8 * 2 * (x + 2) * y, (byte) 0);
         outBackward = fftw.fftw_malloc(new NativeSize(8 * (x + 2) * y)).getByteBuffer(0, 8 * (x + 2) * y).asDoubleBuffer();
 
         totalSize = x * y;
 
-        plan_forward = fftw.fftw_plan_dft_r2c_2d(x, y, inForward, outForward, Fftw3Library.FFTW_ESTIMATE);
-        plan_backward = fftw.fftw_plan_dft_c2r_2d(x, y, inBackward, outBackward, Fftw3Library.FFTW_ESTIMATE);
+        plan_forward = fftw.fftw_plan_dft_r2c_2d(x, y, inForward, outForward, Fftw3Library.FFTW_PATIENT);
+        plan_backward = fftw.fftw_plan_dft_c2r_2d(x, y, inBackward, outBackward, Fftw3Library.FFTW_PATIENT);
     }
 
     public ArrayList<Complex> executeForward(double[] in) {
@@ -58,7 +61,11 @@ public class FourierTransformation {
 
         ArrayList<Complex> result = new ArrayList<>();
 
-        for (int i = 0; i < 2 * totalSize; i += 2) {
+        for (int i = 0; i < 2 * (totalSize + 4); i += 2) {
+        	if((i) % (9)  == 0 && i != 0) {
+        		i += 0;
+        	}
+        	
             result.add(new Complex(outForward.getDoubleArray(i * 8, 2)[0] / totalSize, outForward.getDoubleArray(i * 8, 2)[1] / totalSize));
         }
 
@@ -76,6 +83,8 @@ public class FourierTransformation {
 
         outBackward.get(out);
 
+        outBackward.rewind();
+        
         return out;
     }
 
